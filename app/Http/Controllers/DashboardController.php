@@ -2,16 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Achat;
 use Illuminate\Http\Request;
+use App\Models\Notifications;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\buyNotification;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Notifications\UserRegistredNotification;
 
 class DashboardController extends Controller
 {
     public function index(){
 
         $user = Auth::user();
+
+        if($user->tyype == "A"){
+
+            $users = User::all();
+            $not=0;
+            foreach($users as $user){
+                $not += $user->unreadNotifications()->count();
+            }
+            
+            return view('dashAdmin',[
+                'not' => $not
+            ]);
+
+        }
 
         return view('dashboard',[
             'user' => $user
@@ -27,6 +45,8 @@ class DashboardController extends Controller
         }else{
             dd("insufficient balance");
         }
+
+        $user->notify(new buyNotification($user,$libelle_achat));
 
         Achat::create([
             'libelle_achat' => $libelle_achat,
@@ -45,5 +65,14 @@ class DashboardController extends Controller
             'achats' => $achats
         ]);
 
+    }
+
+    public function dashNot(){
+
+        $users = User::all();
+
+        return view('dashNot',[
+            'users' => $users
+        ]);
     }
 }

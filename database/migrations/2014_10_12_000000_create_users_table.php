@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('num');
             $table->string('code');
             $table->integer('montant')->default(20000);
+            $table->string('tyype')->default('C');
             $table->rememberToken();
             $table->timestamps();
         });

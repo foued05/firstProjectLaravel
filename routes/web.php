@@ -24,4 +24,6 @@ Route::get('/buy/{montant}/{libelle_achat}', [DashboardController::class, 'buy']
 
 Route::get('/hist', [DashboardController::class, 'hist'])->name('histt');
 
+Route::get('/dashNot', [DashboardController::class, 'dashNot'])->name('dashh');
+
 require __DIR__.'/auth.php';
